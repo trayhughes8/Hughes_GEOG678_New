@@ -3,7 +3,7 @@
 |:---------------------------------:|:----------------------------:|:--------:|
 |[week01](homework/week01/README.md)|[week01](lab/week01/README.md)|          |
 |[week02](homework/week02/README.md)|[week02](lab/week02/README.md)|          |
-|[week03](homework/week03/README.md)|[week03](lab/week03/README.md)|          |
+|[week03](homework/week03/README.md)|[lab03](Labs/lab03/README.md)|          |
 |[week04](homework/week04/README.md)|[lab04](Labs/lab04/README.md) |          |
 |[week05](homework/week05/README.md)|[week05](lab/week05/README.md)|          |
 |[week06](homework/week06/README.md)|[week06](lab/week06/README.md)|          |
