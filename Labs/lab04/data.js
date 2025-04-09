@@ -5,5 +5,3 @@ var data = [
     { lat: 30.6, lon: -96.2 },
     { lat: 29.9, lon: -96.6 }
 ];
-
-# testing
