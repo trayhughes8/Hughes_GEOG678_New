@@ -54,5 +54,3 @@ function findBottomRight(data) {
         return bottomRight;
     }, data[0]);
 }
-
-# testing
