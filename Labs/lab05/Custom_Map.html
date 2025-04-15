@@ -1,0 +1,101 @@
+# Custom Map: Hughes First Web Map
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hughes First Web Map</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+
+    <style>
+        html, body, #map {
+            height: 100%;
+            width: 100vw;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+
+<div id="map"></div>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+        crossorigin=""></script>
+
+<script>
+    // Initialize map to fit user's location when found
+    var map = L.map('map').fitWorld();
+
+    // Add OpenStreetMap tile layer
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Geolocation with view set
+    map.locate({setView: true, maxZoom: 18});
+
+    // On location found
+    map.on('locationfound', function(e) {
+        var radius = e.accuracy;
+        L.marker(e.latlng).addTo(map)
+            .bindPopup("You are within " + Math.round(radius) + " meters from this point").openPopup();
+        L.circle(e.latlng, radius).addTo(map);
+    });
+
+    // On location error
+    map.on('locationerror', function(e) {
+        alert(e.message);
+    });
+
+    // Draw circle around Kyle Field
+    L.circle([30.60975, -96.34038], {
+        color: 'blue',
+        fillColor: '#30f',
+        fillOpacity: 0.4,
+        radius: 100
+    }).addTo(map).bindPopup("Kyle Field");
+
+    // Custom icon class
+    var LeafIcon = L.Icon.extend({
+        options: {
+            shadowUrl: 'leaf-shadow.png',
+            iconSize:     [38, 95],
+            shadowSize:   [50, 64],
+            iconAnchor:   [22, 94],
+            shadowAnchor: [4, 62],
+            popupAnchor:  [-3, -76]
+        }
+    });
+
+    // Use your own icon images (make sure they're in the same directory)
+    var greenIcon = new LeafIcon({iconUrl: 'leaf-green.png'});
+    var redIcon = new LeafIcon({iconUrl: 'leaf-red.png'});
+
+    // Add custom markers with icons and popups
+    L.marker([30.6179, -96.3386], {icon: greenIcon}).addTo(map)
+        .bindPopup("O&M Building");
+
+    L.marker([30.6159, -96.3413], {icon: redIcon}).addTo(map)
+        .bindPopup("Academic Building");
+
+    // Show coordinates on map click
+    map.on('click', function(e) {
+        L.popup()
+            .setLatLng(e.latlng)
+            .setContent("You clicked at " + e.latlng.lat.toFixed(5) + ", " + e.latlng.lng.toFixed(5))
+            .openOn(map);
+    });
+
+</script>
+
+</body>
+</html>
+
