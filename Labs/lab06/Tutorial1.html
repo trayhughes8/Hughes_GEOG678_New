@@ -1,0 +1,173 @@
+# Tutorial 1: Using GeoJSON with Leaflet
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Leaflet with GeoJSON</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Leaflet CSS & JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <style>
+        #map {
+            height: 600px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="map"></div>
+
+<script>
+    // Create the map and set initial view
+    var map = L.map('map').setView([39.75, -104.99], 5);
+
+    // Add OpenStreetMap tile layer
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19
+    }).addTo(map);
+
+    // Define a single GeoJSON feature (point)
+    var geojsonFeature = {
+        "type": "Feature",
+        "properties": {
+            "name": "Coors Field",
+            "amenity": "Baseball Stadium",
+            "popupContent": "This is where the Rockies play!"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [-104.99404, 39.75621]
+        }
+    };
+
+    // onEachFeature for popups
+    function onEachFeature(feature, layer) {
+        if (feature.properties && feature.properties.popupContent) {
+            layer.bindPopup(feature.properties.popupContent);
+        }
+    }
+
+    // Add point feature with popup
+    L.geoJSON(geojsonFeature, {
+        onEachFeature: onEachFeature
+    }).addTo(map);
+
+    // Style lines
+    var myLines = [{
+        "type": "LineString",
+        "coordinates": [[-100, 40], [-105, 45], [-110, 55]]
+    }, {
+        "type": "LineString",
+        "coordinates": [[-105, 40], [-110, 45], [-115, 55]]
+    }];
+
+    var myStyle = {
+        "color": "#ff7800",
+        "weight": 5,
+        "opacity": 0.65
+    };
+
+    L.geoJSON(myLines, {
+        style: myStyle
+    }).addTo(map);
+
+    // Style polygons based on property
+    var states = [{
+        "type": "Feature",
+        "properties": {"party": "Republican"},
+        "geometry": {
+            "type": "Polygon",
+            "coordinates": [[
+                [-104.05, 48.99],
+                [-97.22,  48.98],
+                [-96.58,  45.94],
+                [-104.03, 45.94],
+                [-104.05, 48.99]
+            ]]
+        }
+    }, {
+        "type": "Feature",
+        "properties": {"party": "Democrat"},
+        "geometry": {
+            "type": "Polygon",
+            "coordinates": [[
+                [-109.05, 41.00],
+                [-102.06, 40.99],
+                [-102.03, 36.99],
+                [-109.04, 36.99],
+                [-109.05, 41.00]
+            ]]
+        }
+    }];
+
+    L.geoJSON(states, {
+        style: function(feature) {
+            switch (feature.properties.party) {
+                case 'Republican': return {color: "#ff0000"};
+                case 'Democrat':   return {color: "#0000ff"};
+            }
+        }
+    }).addTo(map);
+
+    // Use pointToLayer to customize marker
+    var someGeojsonFeature = {
+        "type": "Feature",
+        "properties": {},
+        "geometry": {
+            "type": "Point",
+            "coordinates": [-103.99404, 39.85621]
+        }
+    };
+
+    var geojsonMarkerOptions = {
+        radius: 8,
+        fillColor: "#ff7800",
+        color: "#000",
+        weight: 1,
+        opacity: 1,
+        fillOpacity: 0.8
+    };
+
+    L.geoJSON(someGeojsonFeature, {
+        pointToLayer: function (feature, latlng) {
+            return L.circleMarker(latlng, geojsonMarkerOptions);
+        }
+    }).addTo(map);
+
+    // Filter features
+    var someFeatures = [{
+        "type": "Feature",
+        "properties": {
+            "name": "Coors Field",
+            "show_on_map": true
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [-104.99404, 39.75621]
+        }
+    }, {
+        "type": "Feature",
+        "properties": {
+            "name": "Busch Field",
+            "show_on_map": false
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [-104.98404, 39.74621]
+        }
+    }];
+
+    L.geoJSON(someFeatures, {
+        filter: function(feature, layer) {
+            return feature.properties.show_on_map;
+        },
+        onEachFeature: onEachFeature
+    }).addTo(map);
+</script>
+
+</body>
+</html>
