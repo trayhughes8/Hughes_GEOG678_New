@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>College Station Weekly Temperature Forecast (D3.js)</title>
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+
+  <style>
+    #chart div {
+      font: 10px sans-serif;
+      background-color: steelblue;
+      text-align: right;
+      padding: 3px;
+      margin: 1px;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+<h2>Highest Temperatures (°F) for the Week</h2>
+<div id="chart"></div>
+
+<script>
+  var data = [82, 81, 81, 70, 77, 78, 79, 80];
+
+  d3.select("#chart")
+    .selectAll("div")
+    .data(data)
+    .enter()
+    .append("div")
+    .style("width", function(d) { return d * 5 + "px"; })  // *5 to make bars longer
+    .text(function(d) { return d + "°F"; });
+</script>
+
+</body>
+</html>
+
+
